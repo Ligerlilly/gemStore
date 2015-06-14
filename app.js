@@ -14,9 +14,16 @@ var gemSchema = {
 
 var Gem = mongoose.model('Gem', gemSchema, 'gems');
 
-app.get('/', function(request, response){
-  Gem.find(function(err, doc){
-    response.json(doc);
+app.use(function(request, response, next){
+  response.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+  response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  response.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+  next();
+});
+
+app.get('/gems', function(request, response){
+  Gem.find(function(err, docs){
+    response.send({gem:docs});
   });
 });
 
