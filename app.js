@@ -27,6 +27,12 @@ app.get('/gems', function(request, response){
   });
 });
 
+app.get('/gems/:id', function(request, response){
+  Gem.findById(request.params.id, function(err, doc){
+    response.send({gem:doc});
+  });
+});
+
 app.listen(3000, function(request, response){
   console.log('Listening on port 3000');
 });
