@@ -1,6 +1,10 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 mongoose.connect('mongodb://localhost:27017/test');
 
@@ -8,7 +12,7 @@ var gemSchema = {
   name:String,
   description:String,
   quantiy:Number,
-  Price:Number,
+  price:Number,
   image:String
 };
 
@@ -24,6 +28,24 @@ app.use(function(request, response, next){
 app.get('/gems', function(request, response){
   Gem.find(function(err, docs){
     response.send({gem:docs});
+  });
+});
+
+app.put('/gems/:id', function(request, response){
+  Gem.findById(request.params.id, function(err, doc){
+    if (err){
+      response.send(err);
+    }
+    doc.name = request.body.gem.name;
+    doc.description = request.body.gem.description;
+    doc.quantity = request.body.gem.quantity;
+    doc.price = request.body.gem.price;
+    doc.save(function(err){
+      if (err){
+        response.send(err);
+      }
+      response.send({gem:doc});
+    });
   });
 });
 
