@@ -49,6 +49,14 @@ app.put('/gems/:id', function(request, response){
   });
 });
 
+app.delete('/gems/:id', function(request, response){
+  Gem.findByIdAndRemove(request.params.id, function(err){
+    if (err){
+      response.send(err);
+    }
+  });
+});
+
 app.get('/gems/:id', function(request, response){
   Gem.findById(request.params.id, function(err, doc){
     response.send({gem:doc});
