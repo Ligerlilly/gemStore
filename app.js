@@ -57,6 +57,21 @@ app.delete('/gems/:id', function(request, response){
   });
 });
 
+app.post('/gems', function(request, response){
+  var doc= new Gem({
+    name: request.body.gem.name,
+    description: request.body.gem.description,
+    quantity: request.body.gem.quantity,
+    price: request.body.gem.price
+  });
+  doc.save(function(err){
+    if (err){
+      response.send(err);
+    }
+    response.send({gem: doc });
+  });
+});
+
 app.get('/gems/:id', function(request, response){
   Gem.findById(request.params.id, function(err, doc){
     response.send({gem:doc});
